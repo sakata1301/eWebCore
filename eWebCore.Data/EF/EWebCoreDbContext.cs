@@ -1,5 +1,6 @@
 ﻿using eWebCore.Data.Configurations;
 using eWebCore.Data.Entities;
+using eWebCore.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,8 @@ namespace eWebCore.Data.EF
             modelBuilder.ApplyConfiguration(new PromotionConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionConfiguration());
 
-            //base.OnModelCreating(modelBuilder);
+            //data seeding
+            modelBuilder.Seed();
         }
 
         public DbSet<Product> Products { get; set; }
