@@ -1,7 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\eWebCore.Data\eWebCore.Data.csproj" />
+    <ProjectReference Include="..\eWebCore.Utilities\eWebCore.Utilities.csproj" />
+    <ProjectReference Include="..\eWebCore.ViewModels\eWebCore.ViewModels.csproj" />
+  </ItemGroup>
 
 </Project>
