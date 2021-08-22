@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eWebCore.Data.EF;
 
 namespace eWebCore.Data.Migrations
 {
     [DbContext(typeof(EWebCoreDbContext))]
-    partial class EWebCoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210821033902_Add_ProductIamge")]
+    partial class Add_ProductIamge
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,7 +182,7 @@ namespace eWebCore.Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "f8e8ab44-48b8-403c-bc14-9cdad51c0f42",
+                            ConcurrencyStamp = "90fbc953-83a1-40c2-8595-9485ce0abf51",
                             Desc = "Administrator role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -257,7 +259,7 @@ namespace eWebCore.Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "92bb3a1b-96f6-48b9-a2cc-aa0afd54ac82",
+                            ConcurrencyStamp = "c417c100-9b6d-4fbc-a430-56efbb138a9e",
                             Dob = new DateTime(1999, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "sakata@gmail.com",
                             EmailConfirmed = true,
@@ -266,7 +268,7 @@ namespace eWebCore.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "sakata@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGRwVshVz5nQ/vERIYgcyv7R20IJEwNwV2wOloB81ZthiwXrASMc16omry6KUh2f5Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIQ910jMPYlhs5koIx9jWRBk6ZxuA5AuVOoBXEh3jFR1bi6Qepfd+whNnwdD4ecBag==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -614,7 +616,7 @@ namespace eWebCore.Data.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2021, 8, 21, 15, 9, 22, 365, DateTimeKind.Local).AddTicks(458),
+                            DateCreated = new DateTime(2021, 8, 21, 10, 39, 1, 853, DateTimeKind.Local).AddTicks(9698),
                             OriginalPrice = 100000m,
                             Price = 200000m,
                             Stock = 0,
@@ -638,8 +640,8 @@ namespace eWebCore.Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("FileSize")
-                        .HasColumnType("bigint");
+                    b.Property<int>("FileSize")
+                        .HasColumnType("int");
 
                     b.Property<string>("ImagePath")
                         .IsRequired()
