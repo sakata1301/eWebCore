@@ -13,4 +13,8 @@
     <Folder Include="wwwroot\user-content\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
+  </ItemGroup>
+
 </Project>
