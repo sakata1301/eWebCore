@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eWebCore.WebApp", "eWebCore.WebApp\eWebCore.WebApp.csproj", "{A6B1D740-9246-4F1C-9D00-165EB4236917}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{385AE8AA-7A73-4DDA-ACC0-B98AC78D32A5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.Solution Items", "0.Solution Items", "{385AE8AA-7A73-4DDA-ACC0-B98AC78D32A5}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
@@ -16,7 +16,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eWebCore.Application", "eWe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eWebCore.Utilities", "eWebCore.Utilities\eWebCore.Utilities.csproj", "{B85A864B-4662-4773-84C2-F4210D7702E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eWebCore.ViewModels", "eWebCore.ViewModels\eWebCore.ViewModels.csproj", "{809F3CE3-A9BC-43C8-9977-E11ED10EC258}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eWebCore.ViewModels", "eWebCore.ViewModels\eWebCore.ViewModels.csproj", "{809F3CE3-A9BC-43C8-9977-E11ED10EC258}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eWebCore.BackEndApi", "eWebCore.BackEndApi\eWebCore.BackEndApi.csproj", "{2724557E-DFF4-4352-9DAB-F307E21414BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.Common", "1.Common", "{47907E27-10AA-4E26-A36F-1EEDA94AFDDA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Domain", "2.Domain", "{92C60849-2FE3-4828-891E-211407A36157}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Host", "3.Host", "{ADD02767-8311-416C-87B5-56FAA4886A6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,9 +52,21 @@ Global
 		{809F3CE3-A9BC-43C8-9977-E11ED10EC258}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{809F3CE3-A9BC-43C8-9977-E11ED10EC258}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{809F3CE3-A9BC-43C8-9977-E11ED10EC258}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2724557E-DFF4-4352-9DAB-F307E21414BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2724557E-DFF4-4352-9DAB-F307E21414BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2724557E-DFF4-4352-9DAB-F307E21414BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2724557E-DFF4-4352-9DAB-F307E21414BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A6B1D740-9246-4F1C-9D00-165EB4236917} = {ADD02767-8311-416C-87B5-56FAA4886A6D}
+		{E9EE1E51-A2F8-48D6-8912-C44BE277F848} = {92C60849-2FE3-4828-891E-211407A36157}
+		{9DAF78D3-CF9A-4905-8186-CCE3F6837DDA} = {92C60849-2FE3-4828-891E-211407A36157}
+		{B85A864B-4662-4773-84C2-F4210D7702E7} = {47907E27-10AA-4E26-A36F-1EEDA94AFDDA}
+		{809F3CE3-A9BC-43C8-9977-E11ED10EC258} = {47907E27-10AA-4E26-A36F-1EEDA94AFDDA}
+		{2724557E-DFF4-4352-9DAB-F307E21414BB} = {ADD02767-8311-416C-87B5-56FAA4886A6D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1ABD792D-5A6F-49EE-AB82-6B4B8B22E16A}

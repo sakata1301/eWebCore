@@ -10,6 +10,7 @@ namespace eWebCore.Application.Catalog.ProductFolder
 {
     public interface IPublicProductService
     {
-        Task<PagingResult<ProductViewModel>> GetProductByCategory(GetPublicProductPagingRequest request);
+        Task<PagingResult<ProductViewModel>> GetProductByCategory(string languageId,GetPublicProductPagingRequest request);
+        Task<List<ProductViewModel>> GetAll(string languageId);
     }
 }
