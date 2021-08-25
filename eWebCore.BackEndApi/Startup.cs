@@ -3,6 +3,9 @@ using eWebCore.Application.Common;
 using eWebCore.Application.System.User;
 using eWebCore.Data.EF;
 using eWebCore.Data.Entities;
+using eWebCore.ViewModels.System.User;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -50,6 +53,12 @@ namespace eWebCore.BackEndApi
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
+
+            //Khai Bao Service Fluent Validattion
+            services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
+
+            services.AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
             //Khai bao swagger
             services.AddSwaggerGen(c =>
