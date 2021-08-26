@@ -2,6 +2,7 @@
 using eWebCore.Utilities.Exceptions;
 using eWebCore.ViewModels.Common;
 using eWebCore.ViewModels.System.User;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +24,9 @@ namespace eWebCore.Application.System.User
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _config;
 
-        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager,
+        public UserService(UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
+            RoleManager<AppRole> roleManager,
             IConfiguration config)
         {
             _signInManager = signInManager;
@@ -32,16 +35,16 @@ namespace eWebCore.Application.System.User
             _config = config;
         }
 
-        public async Task<string> Authenticate(LoginRequest request)
+        public async Task<ApiResult<string>> Authenticate(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.Username);
             if (user == null)
-                return null;
+                return new ApiErrorResult<string>("Đăng nhập không đúng");
 
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
             if (!result.Succeeded)
             {
-                return null;
+                return new ApiErrorResult<string>("Đăng nhập không đúng");
             }
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new[]
@@ -62,10 +65,30 @@ namespace eWebCore.Application.System.User
                 expires: DateTime.Now.AddHours(3),
                 signingCredentials: creds);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var tokenResult = new JwtSecurityTokenHandler().WriteToken(token);
+            return new ApiSuccsessResult<string>(tokenResult);
         }
 
-        public async Task<PagingResult<UserViewModel>> GetUserPaging(GetUserPagingRequest request)
+        public async Task<ApiResult<UserViewModel>> GetUserById(Guid id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return new ApiErrorResult<UserViewModel>("Id nay khong ton tai");
+            }
+            var userVM = new UserViewModel()
+            {
+                Dob = user.Dob,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                FirstName = user.FirstName,
+                Id = user.Id,
+                LastName = user.LastName
+            };
+            return new ApiSuccsessResult<UserViewModel>(userVM);
+        }
+
+        public async Task<ApiResult<PagingResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request)
         {
             var query = _userManager.Users;
             if (!string.IsNullOrEmpty(request.KeyWord))
@@ -92,11 +115,22 @@ namespace eWebCore.Application.System.User
                 items = data
             };
 
-            return pageResult;
+            return new ApiSuccsessResult<PagingResult<UserViewModel>>(pageResult);
         }
 
-        public async Task<bool> Register(RegisterRequest request)
+        public async Task<ApiResult<bool>> Register(RegisterRequest request)
         {
+            var checkUser = await _userManager.FindByNameAsync(request.Username);
+            if (checkUser != null)
+            {
+                return new ApiErrorResult<bool>("Tài khoản đã tồn tại");
+            }
+
+            if (await _userManager.FindByEmailAsync(request.Email) != null)
+            {
+                return new ApiErrorResult<bool>("Emai đã tồn tại");
+            }
+
             var user = new AppUser()
             {
                 Dob = request.Dob,
@@ -109,9 +143,32 @@ namespace eWebCore.Application.System.User
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
-                return true;
+                return new ApiErrorResult<bool>();
             }
-            return false;
+            return new ApiErrorResult<bool>("Đăng ký không thành công");
+        }
+
+        public async Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request)
+        {
+            var checkEmail = await _userManager.Users.AnyAsync(x => x.Id != id && request.Email == x.Email);
+            if (checkEmail)
+            {
+                return new ApiErrorResult<bool>("Emai đã tồn tại");
+            }
+            var user = await _userManager.FindByIdAsync(id.ToString());
+
+            user.Dob = request.Dob;
+            user.Email = request.Email;
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.PhoneNumber = request.PhoneNumder;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return new ApiSuccsessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Update không thành công");
         }
     }
 }

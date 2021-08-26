@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace eWebCore.ViewModels.System.User
 {
-    public class UserViewModel
+    public class UserUpdateRequest
     {
         public Guid Id { get; set; }
         public string FirstName { set; get; }
-        public string Email { set; get; }
         public string LastName { set; get; }
-        public string PhoneNumber { set; get; }
-        public string UserName { set; get; }
-        public DateTime Dob { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime Dob { set; get; }
+
+        public string Email { get; set; }
+        public string PhoneNumder { get; set; }
     }
 }

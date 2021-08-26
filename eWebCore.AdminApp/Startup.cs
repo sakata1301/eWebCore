@@ -4,6 +4,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +34,7 @@ namespace eWebCore.AdminApp
                .AddCookie(options =>
                {
                    //Neu chua dang nhap thi voa link nay
-                   options.LoginPath = "/User/Login";
+                   options.LoginPath = "/Login/Index";
                    options.AccessDeniedPath = "/User/Forbidden/";
                });
 
@@ -44,7 +45,8 @@ namespace eWebCore.AdminApp
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
-
+            //Them lenh nay de su dung lay session bearer
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserApiClient, UserApiClient>();
         }
 

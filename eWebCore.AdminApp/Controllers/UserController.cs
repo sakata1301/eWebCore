@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace eWebCore.AdminApp.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private readonly IUserApiClient _userApiClient;
         private readonly IConfiguration _configuration;
@@ -39,10 +39,10 @@ namespace eWebCore.AdminApp.Controllers
                 BearerToken = sessions
             };
             var data = await _userApiClient.GetUserPaging(request);
-            return View(data);
+            return View(data.ObjResult);
         }
 
-        [HttpGet]
+        /*[HttpGet]
         public async Task<ActionResult> Login()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -73,7 +73,7 @@ namespace eWebCore.AdminApp.Controllers
                         authProperties);
 
             return RedirectToAction("Index", "Home");
-        }
+        }*/
 
         [HttpPost]
         public async Task<ActionResult> Logout()
@@ -82,6 +82,67 @@ namespace eWebCore.AdminApp.Controllers
             return RedirectToAction("Login", "User");
         }
 
+        [HttpGet]
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(RegisterRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _userApiClient.RegisterUser(request);
+            if (result.IsSuccessed)
+            {
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Edit(Guid id)
+        {
+            var result = await _userApiClient.GetUserById(id);
+            if (result != null)
+            {
+                var user = result.ObjResult;
+                var userUpdateRequest = new UserUpdateRequest()
+                {
+                    Dob = user.Dob,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    PhoneNumder = user.PhoneNumber,
+                    Id = id
+                };
+                return View(userUpdateRequest);
+            }
+
+            return RedirectToAction("Error", "Home");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Edit(UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _userApiClient.UpdateUser(request.Id, request);
+            if (result.IsSuccessed)
+            {
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
+
+        //Ham dung de giai token
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {
             IdentityModelEventSource.ShowPII = true;
