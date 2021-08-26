@@ -3,9 +3,8 @@ using eWebCore.ViewModels.System.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.Extensions.Configuration;
+
 using System.Threading.Tasks;
 
 namespace eWebCore.BackEndApi.Controllers
@@ -23,7 +22,7 @@ namespace eWebCore.BackEndApi.Controllers
 
         [HttpPost("Authenticate")]
         [AllowAnonymous]
-        public async Task<IActionResult> Authenticate([FromForm] LoginRequest request)
+        public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -35,12 +34,12 @@ namespace eWebCore.BackEndApi.Controllers
                 return BadRequest("User or Pass incorrect");
             }
 
-            return Ok(new { token = resultToken });
+            return Ok(resultToken);
         }
 
         [HttpPost("Register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromForm] RegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -53,6 +52,13 @@ namespace eWebCore.BackEndApi.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
+        {
+            var data = await _userService.GetUserPaging(request);
+            return Ok(data);
         }
     }
 }

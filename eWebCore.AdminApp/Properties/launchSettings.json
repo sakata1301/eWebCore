@@ -3,8 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:21016",
-      "sslPort": 44330
+      "applicationUrl": "http://localhost:62174",
+      "sslPort": 44393
     }
   },
   "profiles": {
@@ -15,12 +15,11 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "eWebCore.BackEndApi": {
+    "eWebCore.AdminApp": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:5001",
+      "applicationUrl": "https://localhost:5002",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
