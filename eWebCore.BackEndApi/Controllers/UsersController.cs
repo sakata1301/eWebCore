@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-
+using System;
 using System.Threading.Tasks;
 
 namespace eWebCore.BackEndApi.Controllers
@@ -29,9 +29,9 @@ namespace eWebCore.BackEndApi.Controllers
                 return BadRequest(ModelState);
             }
             var resultToken = await _userService.Authenticate(request);
-            if (string.IsNullOrEmpty(resultToken))
+            if (string.IsNullOrEmpty(resultToken.ObjResult))
             {
-                return BadRequest("User or Pass incorrect");
+                return BadRequest(resultToken);
             }
 
             return Ok(resultToken);
@@ -46,18 +46,41 @@ namespace eWebCore.BackEndApi.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _userService.Register(request);
-            if (!result)
+            if (!result.IsSuccessed)
             {
-                return BadRequest("Register is unsuccess");
+                return BadRequest(result);
             }
 
             return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userService.Update(id, request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] GetUserPagingRequest request)
         {
             var data = await _userService.GetUserPaging(request);
+            return Ok(data);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(Guid id)
+        {
+            var data = await _userService.GetUserById(id);
             return Ok(data);
         }
     }

@@ -10,10 +10,14 @@ namespace eWebCore.Application.System.User
 {
     public interface IUserService
     {
-        Task<string> Authenticate(LoginRequest request);
+        Task<ApiResult<string>> Authenticate(LoginRequest request);
 
-        Task<bool> Register(RegisterRequest request);
+        Task<ApiResult<bool>> Register(RegisterRequest request);
 
-        Task<PagingResult<UserViewModel>> GetUserPaging(GetUserPagingRequest request);
+        Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request);
+
+        Task<ApiResult<PagingResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request);
+
+        Task<ApiResult<UserViewModel>> GetUserById(Guid id);
     }
 }
