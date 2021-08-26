@@ -1,7 +1,9 @@
 ﻿using eWebCore.Data.Entities;
 using eWebCore.Utilities.Exceptions;
+using eWebCore.ViewModels.Common;
 using eWebCore.ViewModels.System.User;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -45,7 +47,8 @@ namespace eWebCore.Application.System.User
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email,user.Email),
-                new Claim(ClaimTypes.Name,user.LastName),
+                new Claim(ClaimTypes.GivenName,user.LastName),
+                new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(ClaimTypes.Role,string.Join(";",roles))
             };
 
@@ -60,6 +63,36 @@ namespace eWebCore.Application.System.User
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public async Task<PagingResult<UserViewModel>> GetUserPaging(GetUserPagingRequest request)
+        {
+            var query = _userManager.Users;
+            if (!string.IsNullOrEmpty(request.KeyWord))
+            {
+                query = query.Where(x => x.UserName.Contains(request.KeyWord)
+                  || x.PhoneNumber.Contains(request.KeyWord));
+            }
+
+            int totalRow = await query.CountAsync();
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
+                .Select(x => new UserViewModel()
+                {
+                    UserName = x.UserName,
+                    Email = x.Email,
+                    PhoneNumber = x.PhoneNumber,
+                    FirstName = x.FirstName,
+                    Id = x.Id,
+                    LastName = x.LastName
+                }).ToListAsync();
+
+            var pageResult = new PagingResult<UserViewModel>()
+            {
+                TotalRecord = totalRow,
+                items = data
+            };
+
+            return pageResult;
         }
 
         public async Task<bool> Register(RegisterRequest request)
