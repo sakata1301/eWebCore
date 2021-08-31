@@ -6,6 +6,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Scripts{
+    <script>
+        setTimeout(function () {
+            $("#myAlert").fadeOut('slow');
+        }, 2000);
+    </script>
+}
+
 <div class="container-fluid px-4">
     <h1 class="mt-4"></h1>
     <ol class="breadcrumb mb-4">
@@ -15,9 +23,32 @@
 
     <div class="card mb-4">
         <div class="card-header">
-            <a class="btn btn-success" asp-action="Create" asp-controller="User">Tao Moi</a>
+            <div class="row">
+                <div class="col-md-4 col-xs-12">
+                    <a class="btn btn-success" asp-action="Create" asp-controller="User">Tao Moi</a>
+                </div>
+                <div class="col-md-8 col-xs-12">
+                    <form asp-action="Index" method="get">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-primary">Tim</button>
+                                <button type="button" onclick="window.location.href='/user/index'" class="btn btn-dark">Reset</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
         <div class="card-body">
+            @if (ViewBag.SuccessMsg != null)
+            {
+                <div id="myAlert" class="alert alert-success" role="alert">
+                    @ViewBag.SuccessMsg
+                </div>
+            }
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>
@@ -67,14 +98,16 @@
                                 </td>
                                 <td>
                                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                    @Html.ActionLink("Details", "Detail", new { id = item.Id }) |
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })|
+                                    @Html.ActionLink("RoleAssign", "RoleAssign", new { id = item.Id })
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
+            @await Component.InvokeAsync("Pager", Model)
         </div>
     </div>
 </div>

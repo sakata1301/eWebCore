@@ -18,5 +18,9 @@ namespace eWebCore.AdminApp.Services
         Task<ApiResult<bool>> UpdateUser(Guid id, UserUpdateRequest requet);
 
         Task<ApiResult<UserViewModel>> GetUserById(Guid id);
+
+        Task<ApiResult<bool>> Delete(Guid id);
+
+        Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
     }
 }

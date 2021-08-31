@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eWebCore.ViewModels.Common
+namespace eWebCore.ViewModels.System.User
 {
-    public class PagingResult<T> : PagingResultBase
+    public class UserDeleteRequest
     {
-        public List<T> items { set; get; }
+        public Guid Id { get; set; }
     }
 }

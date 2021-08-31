@@ -50,7 +50,11 @@ namespace eWebCore.AdminApp.Controllers
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                 IsPersistent = false
             };
-
+            if (token.ObjResult == null)
+            {
+                ModelState.AddModelError("", token.Message);
+                return View();
+            }
             var userPrincipal = this.ValidateToken(token.ObjResult);
             HttpContext.Session.SetString("Token", token.ObjResult);
             await HttpContext.SignInAsync(

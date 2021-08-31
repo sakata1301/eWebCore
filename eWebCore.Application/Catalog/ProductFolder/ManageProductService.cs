@@ -192,7 +192,7 @@ namespace eWebCore.Application.Catalog.ProductFolder
 
             var pageResult = new PagingResult<ProductViewModel>()
             {
-                TotalRecord = totalRow,
+                TotalRecords = totalRow,
                 items = data
             };
 

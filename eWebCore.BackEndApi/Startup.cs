@@ -1,5 +1,6 @@
 using eWebCore.Application.Catalog.ProductFolder;
 using eWebCore.Application.Common;
+using eWebCore.Application.System.Roles;
 using eWebCore.Application.System.User;
 using eWebCore.Data.EF;
 using eWebCore.Data.Entities;
@@ -48,6 +49,7 @@ namespace eWebCore.BackEndApi
             services.AddTransient<IPublicProductService, PublicProductService>();
             services.AddTransient<IManageProductService, ManageProductService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IRoleService, RoleService>();
 
             services.AddTransient<IStorageService, FileStorageService>();
 
