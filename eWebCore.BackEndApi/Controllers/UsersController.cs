@@ -51,7 +51,7 @@ namespace eWebCore.BackEndApi.Controllers
                 return BadRequest(result);
             }
 
-            return Ok();
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
@@ -62,6 +62,22 @@ namespace eWebCore.BackEndApi.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _userService.Update(id, request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPut("{id}/roles")]
+        public async Task<IActionResult> RoleAssign(Guid id, [FromBody] RoleAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userService.RoleAssign(id, request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);
@@ -82,6 +98,13 @@ namespace eWebCore.BackEndApi.Controllers
         {
             var data = await _userService.GetUserById(id);
             return Ok(data);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _userService.Delete(id);
+            return Ok(result);
         }
     }
 }

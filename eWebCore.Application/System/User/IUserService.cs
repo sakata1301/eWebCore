@@ -19,5 +19,9 @@ namespace eWebCore.Application.System.User
         Task<ApiResult<PagingResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request);
 
         Task<ApiResult<UserViewModel>> GetUserById(Guid id);
+
+        Task<ApiResult<bool>> Delete(Guid Id);
+
+        Task<ApiResult<bool>> RoleAssign(Guid Id, RoleAssignRequest request);
     }
 }

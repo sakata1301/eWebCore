@@ -69,6 +69,21 @@ namespace eWebCore.Application.System.User
             return new ApiSuccsessResult<string>(tokenResult);
         }
 
+        public async Task<ApiResult<bool>> Delete(Guid Id)
+        {
+            var user = await _userManager.FindByIdAsync(Id.ToString());
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("Id nay khong ton tai");
+            }
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                return new ApiSuccsessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Xoa khong thanh cong");
+        }
+
         public async Task<ApiResult<UserViewModel>> GetUserById(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
@@ -76,6 +91,7 @@ namespace eWebCore.Application.System.User
             {
                 return new ApiErrorResult<UserViewModel>("Id nay khong ton tai");
             }
+            var roles = await _userManager.GetRolesAsync(user);
             var userVM = new UserViewModel()
             {
                 Dob = user.Dob,
@@ -83,7 +99,9 @@ namespace eWebCore.Application.System.User
                 PhoneNumber = user.PhoneNumber,
                 FirstName = user.FirstName,
                 Id = user.Id,
-                LastName = user.LastName
+                LastName = user.LastName,
+                UserName = user.UserName,
+                Roles = roles
             };
             return new ApiSuccsessResult<UserViewModel>(userVM);
         }
@@ -111,8 +129,10 @@ namespace eWebCore.Application.System.User
 
             var pageResult = new PagingResult<UserViewModel>()
             {
-                TotalRecord = totalRow,
-                items = data
+                TotalRecords = totalRow,
+                items = data,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize
             };
 
             return new ApiSuccsessResult<PagingResult<UserViewModel>>(pageResult);
@@ -143,9 +163,30 @@ namespace eWebCore.Application.System.User
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
-                return new ApiErrorResult<bool>();
+                return new ApiSuccsessResult<bool>();
             }
             return new ApiErrorResult<bool>("Đăng ký không thành công");
+        }
+
+        public async Task<ApiResult<bool>> RoleAssign(Guid Id, RoleAssignRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(Id.ToString());
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("User khong tồn tại");
+            }
+            var removeRoles = request.Roles.Where(x => x.Selected == false).Select(x => x.Name).ToList();
+            await _userManager.RemoveFromRolesAsync(user, removeRoles);
+
+            var addRoles = request.Roles.Where(x => x.Selected == true).Select(x => x.Name).ToList();
+            foreach (var role in addRoles)
+            {
+                if (await _userManager.IsInRoleAsync(user, role) == false)
+                {
+                    await _userManager.AddToRoleAsync(user, role);
+                }
+            }
+            return new ApiSuccsessResult<bool>();
         }
 
         public async Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request)

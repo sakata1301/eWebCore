@@ -15,5 +15,6 @@ namespace eWebCore.ViewModels.System.User
         public string PhoneNumber { set; get; }
         public string UserName { set; get; }
         public DateTime Dob { get; set; }
+        public IList<string> Roles { get; set; }
     }
 }
